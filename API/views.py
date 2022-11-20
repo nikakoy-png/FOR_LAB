@@ -172,11 +172,11 @@ def AddPlant(request):
 @api_view(['POST'])
 def UpdatePlant(request, ID_plant: int):
     if request.method == 'POST':
-        memory.backup(db_plant.getPlantByID(ID_plant), ID_plant)
         try:
             request_user = GetAuthUser(request.headers['Authorization'])
         except InvalidSignatureError:
             return HttpResponse({'TOKEN VERIFICATION FAILED'})
+        memory.backup(db_plant.getPlantByID(ID_plant, request_user), ID_plant)
         request_j = json.loads(request.body)
         plant = Plant.PlantBuilder() \
             .Prolific(request_j['prolific']) \
@@ -368,7 +368,11 @@ def AddObserver(request):
 def UndoPlant(request, ID_plant: int):
     if request.method == 'POST':
         try:
-            db_plant.updatePlant(memory.undo(ID_plant), ID_plant)
+            request_user = GetAuthUser(request.headers['Authorization'])
+        except InvalidSignatureError:
+            return HttpResponse({'TOKEN VERIFICATION FAILED'})
+        try:
+            db_plant.updatePlant(memory.undo(ID_plant), ID_plant, request_user)
         except AttributeError:
             print('Object never used')
         memory.history()
@@ -400,7 +404,7 @@ def authenticate_user(request):
                 }
         except AttributeError:
             return HttpResponse({'USER IS NOT FOUND!!'})
-
+        print(payload)
         if user:
             token = jwt.encode({'data': payload}, settings.SECRET_KEY, algorithm='HS256')
             user_details = {}
