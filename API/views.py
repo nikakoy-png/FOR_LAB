@@ -390,13 +390,16 @@ def authenticate_user(request):
         print(username)
         print(password)
         print(user)
-        payload = {
-                'username': user.getUsername,
-                'password': user.getPassword,
-                'email': user.getEmail,
-                'phone_number': user.getPhoneNumber,
-                'permission': user.getPermission
-            }
+        try:
+            payload = {
+                    'username': user.getUsername,
+                    'password': user.getPassword,
+                    'email': user.getEmail,
+                    'phone_number': user.getPhoneNumber,
+                    'permission': user.getPermission
+                }
+        except AttributeError:
+            return HttpResponse({'USER IS NOT FOUND!!'})
 
         if user:
             token = jwt.encode({'data': payload}, settings.SECRET_KEY, algorithm='HS256')
