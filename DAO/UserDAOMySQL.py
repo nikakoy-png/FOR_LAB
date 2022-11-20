@@ -74,3 +74,20 @@ class UserDAOMySQL(UserDAO):
             self.mysql.cnx.commit()
         except Exception as e:
             lg.error(f'{e}')
+        def GetUserByUsernamePassword(self, username: str, password: str):
+        try:
+            query = (f"SELECT * FROM mydb_for_nsql.user where `username` = '%s' AND `password` = '%s'") % (username,
+                                                                                                        password)
+            result = self.mysql.execute_read_query(query)
+            print(result)
+            user = User.UserBuilder() \
+                .Username(result[0][2]) \
+                .Password(result[0][3]) \
+                .Email(result[0][1]) \
+                .Phone_number(result[0][4]) \
+                .Permission(result[0][5]) \
+                .build()
+            print(user)
+            return user
+        except Exception as e:
+            lg.error(f'{e}')
