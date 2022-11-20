@@ -14,9 +14,9 @@ class UserDAOMySQL(UserDAO):
             result = self.mysql.execute_read_query(check)
             if len(result) is not 0:
                 return None
-            query = ("INSERT INTO `mydb_for_nsql`.`user` (`username`, `password`, `email`, `phone_number`)"
-                     "VALUE ('%s', '%s', '%s', '%s')" % (
-                         user.getUsername, user.getPassword, user.getEmail, user.getPhoneNumber))
+            query = ("INSERT INTO `mydb_for_nsql`.`user` (`username`, `password`, `email`, `phone_number`, `permission_id`)"
+                     "VALUE ('%s', '%s', '%s', '%s', '%s')" % (
+                         user.getUsername, user.getPassword, user.getEmail, user.getPhoneNumber, 1))
             self.mysql.cursor.execute(query)
             self.mysql.cnx.commit()
         except ValueError as e:
@@ -74,7 +74,8 @@ class UserDAOMySQL(UserDAO):
             self.mysql.cnx.commit()
         except Exception as e:
             lg.error(f'{e}')
-        def GetUserByUsernamePassword(self, username: str, password: str):
+
+    def GetUserByUsernamePassword(self, username: str, password: str):
         try:
             query = (f"SELECT * FROM mydb_for_nsql.user where `username` = '%s' AND `password` = '%s'") % (username,
                                                                                                         password)

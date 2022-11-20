@@ -71,7 +71,7 @@ class PlantDAONoSQL(PlantDAO):
                                                                           "growth": plant.getGrowth,
                                                                           "sun_loving": plant.getSun_loving,
                                                                           "description": plant.getDescription,
-                                                                          "prolific": plant.getPrice}})
+                                                                          "prolific": plant.getProlific}})
 
     def addNewPlant(self, plant: Plant):
         request = {

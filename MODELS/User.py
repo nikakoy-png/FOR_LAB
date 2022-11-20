@@ -95,8 +95,13 @@ class User(object):
             self._phone_number = Sun_Loving
             return self
 
-        def Permission(self, permission: int):
-            self._permission = permission
+        def Permission(self, permission: int|str):
+            if 2 == permission:
+                self._permission = 'admin'
+            if 1 == permission:
+                self._permission = 'user'
+            else:
+                self._permission = permission
             return self
 
         def build(self):
