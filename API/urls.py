@@ -24,7 +24,7 @@ urlpatterns = [
 
 
     re_path(r'addObserver/', views.AddObserver),
-    re_path(r'addObserver/', views.DelObserver),
+    re_path(r'delObserver/', views.DelObserver),
 
 
     path(r'undoPlant/<slug:ID_plant>', views.UndoPlant),
